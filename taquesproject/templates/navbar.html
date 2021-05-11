@@ -1,0 +1,40 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid container">
+    <a class="navbar-brand" href="/">
+      <img src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo-black.svg" alt="" width="45" height="36">
+    </a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="{{url_for('home')}}">Início</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('usuarios')}}">Usuários</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{url_for('contato')}}">Contato</a>
+        </li>
+      </ul>
+      <ul class="d-flex navbar-nav">
+        {% if current_user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('create_post') }}">Novo Post</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('profile') }}">Meu Perfil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">Sair</a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('login_criarconta') }}">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('login_criarconta') }}">Criar Conta</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>

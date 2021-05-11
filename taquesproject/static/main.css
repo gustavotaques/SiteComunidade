@@ -1,0 +1,36 @@
+.card {
+    width: 600px;
+    border: rounded;
+    border-radius: 10px;
+    background-color: #dcdcdc
+}
+
+.stats {
+    background: #f2f5f8 !important;
+    color: #000 !important
+}
+
+.articles {
+    font-size: 10px;
+    color: #000
+}
+
+.number1 {
+    font-weight: 500
+}
+
+.user_email {
+    font-size: 10px;
+    text-align: center;
+    color: #000
+}
+
+.number2 {
+    font-weight: 500
+}
+
+.rating {
+    font-size: 10px;
+    color: #000
+}
+
