@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from taquesproject.models import Usuario
@@ -28,6 +29,7 @@ class FormLogin(FlaskForm):  # Criado a lógica de funcionamento do formulário 
 class FormEditarPerfil(FlaskForm):
     username = StringField('Nome de Usuário', validators=[DataRequired()])
     email = StringField('E-mail', validators=[DataRequired(), Email()])
+    profile_pic = FileField('Atualizar foto de perfil', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
     submit_editarperfil = SubmitField('Salvar Alterações')
 
     def validate_email(self, email):
