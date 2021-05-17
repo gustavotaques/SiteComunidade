@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cef4860c-4275-4da8-98b0-3977b83ed2be" name="Default Changelist" comment="Feature&#10;&#10;Adicionando algumas funcionalidades finais no projeto.">
-      <change afterPath="$PROJECT_DIR$/.idea/SiteComunidade.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Procfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/taquesproject/static/fotos_perfil/FB_IMG_14925589231071b2e5e7b1b086271.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/taquesproject/static/fotos_perfil/Foto sem cartao5c0c8a080e4b7e03.jpeg" afterDir="false" />
-    </list>
+    <list default="true" id="cef4860c-4275-4da8-98b0-3977b83ed2be" name="Default Changelist" comment="Feature&#10;&#10;Adicionando algumas funcionalidades finais no projeto." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
