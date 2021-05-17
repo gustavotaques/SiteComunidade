@@ -1,15 +1,17 @@
-from flask import render_template, redirect, request, url_for, flash
+from flask import render_template, redirect, request, url_for, flash, abort
 from taquesproject import app, database, bcrypt
-from taquesproject.forms import FormLogin, FormCriarConta, FormEditarPerfil
-from taquesproject.models import Usuario
+from taquesproject.forms import FormLogin, FormCriarConta, FormEditarPerfil, FormCriarPost
+from taquesproject.models import Usuario, Post
 from flask_login import login_user, logout_user, current_user, login_required
-
-lista_usuarios = ['Gustavo', 'Michele', 'Gabriel', 'Leticia']
+import secrets
+import os
+from PIL import Image  # Biblioteca para reduzir tamanho de imagens
 
 
 @app.route('/')  # Decorator para definir a rota da página
 def home():
-    return render_template('home.html')  # Ele chama uma página HTML. CHAMAR SEMPRE ENTRE ASPAS!!!
+    posts = Post.query.order_by(Post.id.desc())
+    return render_template('home.html', posts=posts)  # Ele chama uma página HTML. CHAMAR SEMPRE ENTRE ASPAS!!!
 
 
 @app.route('/contato')
@@ -20,6 +22,7 @@ def contato():
 @app.route('/usuarios')
 @login_required
 def usuarios():
+    lista_usuarios = Usuario.query.all()
     return render_template('usuarios.html', lista_usuarios=lista_usuarios)
 
 
@@ -64,10 +67,38 @@ def profile():
     return render_template('profile.html', profile_picture=profile_picture)
 
 
-@app.route('/post/criar')
+@app.route('/post/criar', methods=['GET', 'POST'])
 @login_required
 def create_post():
-    return render_template('criarpost.html')
+    form = FormCriarPost()
+    if form.validate_on_submit():
+        post = Post(title=form.title.data, body=form.body.data, author=current_user)
+        database.session.add(post)
+        database.session.commit()
+        flash('Post criado com sucesso!', 'alert-success')
+        return redirect(url_for('home'))
+    return render_template('criarpost.html', form=form)
+
+
+def salvar_imagem(imagem):
+    cod = secrets.token_hex(8)
+    nome, extensao = os.path.splitext(imagem.filename)
+    nome_arquivo = nome + cod + extensao
+    caminho_completo = os.path.join(app.root_path, 'static/fotos_perfil', nome_arquivo)
+    tamanho = (400, 400)
+    imagem_reduzida = Image.open(imagem)
+    imagem_reduzida.thumbnail(tamanho)
+    imagem_reduzida.save(caminho_completo)
+    return nome_arquivo
+
+
+def atualizar_cursos(form):
+    lista_cursos = []
+    for campo in form:
+        if 'curso_' in campo.name:
+            if campo.data:
+                lista_cursos.append(campo.label.text)
+    return ';'.join(lista_cursos)
 
 
 @app.route('/profile/edit', methods=['GET', 'POST'])
@@ -77,6 +108,10 @@ def edit_profile():
     if form.validate_on_submit():
         current_user.email = form.email.data
         current_user.username = form.username.data
+        if form.profile_pic.data:
+            nome_imagem = salvar_imagem(form.profile_pic.data)
+            current_user.profile_pic = nome_imagem
+        current_user.cursos = atualizar_cursos(form)
         database.session.commit()
         flash('Perfil atualizado com sucesso!', 'alert-success')
         return redirect(url_for('profile'))
@@ -85,3 +120,36 @@ def edit_profile():
         form.username.data = current_user.username
     profile_picture = url_for('static', filename=f'fotos_perfil/{current_user.profile_pic}')
     return render_template('editarperfil.html', profile_picture=profile_picture, form=form)
+
+
+@app.route('/post/<post_id>', methods=['GET', 'POST'])
+@login_required
+def exibir_post(post_id):
+    post = Post.query.get(post_id)
+    if current_user == post.author:
+        form = FormCriarPost()
+        if request.method == 'GET':
+            form.title.data = post.title
+            form.body.data = post.body
+        elif form.validate_on_submit():
+            post.title = form.title.data
+            post.body = form.body.data
+            database.session.commit()
+            flash('Post editado com sucesso!', 'alert-success')
+            return redirect(url_for('home'))
+    else:
+        form = None
+    return render_template('post.html', post=post, form=form)
+
+
+@app.route('/post/<post_id>/excluir', methods=['GET', 'POST'])
+@login_required
+def excluir_post(post_id):
+    post = Post.query.get(post_id)
+    if current_user == post.author:
+        database.session.delete(post)
+        database.session.commit()
+        flash('Post excluído com sucesso.', 'alert-danger')
+        return redirect(url_for('home'))
+    else:
+        abort(403)

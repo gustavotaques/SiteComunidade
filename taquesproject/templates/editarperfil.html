@@ -8,7 +8,7 @@
             <div class="col">
                 <form method="POST" action="" class="border p-4 mt-2" enctype="multipart/form-data"> <!–- Sempre que tiver um formulário e tiver que subir um arquivo, tem que colocar no form o enctype="multipart/form-data" -->
                     {{ form.csrf_token }}
-                    <legend>Editar Perfil</legend>
+                    <h4>Editar Perfil</h4>
                     <fieldset>
                         <div class="form-group">
                             {{ form.username.label(class="form-control-label") }}
@@ -46,6 +46,16 @@
                                 {% endfor %}
                             {% endif %}
                         </div>
+                        <hr>
+                        <h4>Cursos</h4>
+                        {% for campo in form %}
+                            {% if 'curso_' in campo.name %}
+                                <div class="field-group">
+                                    {{ campo(class="form-check-input") }}
+                                    {{ campo.label(class="form-check-label") }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
                     </fieldset>
                     {{ form.submit_editarperfil(class="btn btn-dark mt-2") }}
                 </form>
